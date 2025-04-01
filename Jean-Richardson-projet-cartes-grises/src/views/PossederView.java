@@ -27,11 +27,11 @@ public class PossederView extends JFrame {
         for (Posseder propriete : proprietes) {
             JPanel proprietesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             JLabel proprietesLabel = new JLabel(
-                "Propriétaire: " + propriete.getPrenom() + " " + propriete.getNom() +
-                ", Véhicule: " + propriete.getMatricule() +
-                " , Date de début : " + propriete.getDateDebutPropriete() +
-                " , Date de fin : " + (propriete.getDateFinPropriete() != null ? propriete.getDateFinPropriete() : "Actuel")
-            );
+                    "Propriétaire: " + propriete.getPrenom() + " " + propriete.getNom() +
+                            ", Véhicule: " + propriete.getMatricule() +
+                            " , Date de début : " + propriete.getDateDebutPropriete() +
+                            " , Date de fin : "
+                            + (propriete.getDateFinPropriete() != null ? propriete.getDateFinPropriete() : "Actuel"));
 
             // Bouton "Modifier"
             JButton modifyButton = new JButton("Modifier la relation");
@@ -41,17 +41,19 @@ public class PossederView extends JFrame {
                 JTextField prenomProprietaireField = new JTextField(propriete.getPrenom());
                 JTextField matriculeVehiculeField = new JTextField(propriete.getMatricule());
                 JTextField dateDebutField = new JTextField(propriete.getDateDebutPropriete().toString());
-                JTextField dateFinField = new JTextField(propriete.getDateFinPropriete() != null ? propriete.getDateFinPropriete().toString() : "");
+                JTextField dateFinField = new JTextField(
+                        propriete.getDateFinPropriete() != null ? propriete.getDateFinPropriete().toString() : "");
 
                 Object[] message = {
-                    "Nom du propriétaire :", nomProprietaireField,
-                    "Prénom du propriétaire :", prenomProprietaireField,
-                    "Matricule du véhicule :", matriculeVehiculeField,
-                    "Date de début (YYYY-MM-DD) :", dateDebutField,
-                    "Date de fin (YYYY-MM-DD) :", dateFinField
+                        "Nom du propriétaire :", nomProprietaireField,
+                        "Prénom du propriétaire :", prenomProprietaireField,
+                        "Matricule du véhicule :", matriculeVehiculeField,
+                        "Date de début (YYYY-MM-DD) :", dateDebutField,
+                        "Date de fin (YYYY-MM-DD) :", dateFinField
                 };
 
-                int option = JOptionPane.showConfirmDialog(this, message, "Modifier la relation", JOptionPane.OK_CANCEL_OPTION);
+                int option = JOptionPane.showConfirmDialog(this, message, "Modifier la relation",
+                        JOptionPane.OK_CANCEL_OPTION);
                 if (option == JOptionPane.OK_OPTION) {
                     try {
                         // On récupère les nouvelles valeurs
@@ -59,10 +61,13 @@ public class PossederView extends JFrame {
                         String newPrenomProprietaire = prenomProprietaireField.getText();
                         String newMatriculeVehicule = matriculeVehiculeField.getText();
                         Date newDateDebut = Date.valueOf(dateDebutField.getText());
-                        Date newDateFin = dateFinField.getText().isEmpty() ? null : Date.valueOf(dateFinField.getText());
+                        Date newDateFin = dateFinField.getText().isEmpty() ? null
+                                : Date.valueOf(dateFinField.getText());
 
                         // Appel à la méthode de mise à jour
-                        controller.updatePropriete(propriete.getIdProprietaire(), propriete.getIdVehicule(), newNomProprietaire, newPrenomProprietaire, newMatriculeVehicule, newDateDebut, newDateFin);
+                        controller.updatePropriete(propriete.getIdProprietaire(), propriete.getIdVehicule(),
+                                newNomProprietaire, newPrenomProprietaire, newMatriculeVehicule, newDateDebut,
+                                newDateFin);
 
                         // Actualisation de la vue
                         refreshView();
@@ -103,9 +108,9 @@ public class PossederView extends JFrame {
         // Bouton d'ajout
         JButton addButton = new JButton("Ajouter une propriété");
         addButton.addActionListener(e -> {
-            JTextField nomField = new JTextField(); 
-            JTextField prenomField = new JTextField(); 
-            JTextField matriculeField = new JTextField(); 
+            JTextField nomField = new JTextField();
+            JTextField prenomField = new JTextField();
+            JTextField matriculeField = new JTextField();
             JTextField dateDebutField = new JTextField();
             JTextField dateFinField = new JTextField();
 
@@ -146,7 +151,7 @@ public class PossederView extends JFrame {
         // Ajouter le panel d'action en bas de la fenêtre
         add(actionPanel, BorderLayout.SOUTH);
 
-        setVisible(true); 
+        setVisible(true);
     }
 
     // Méthode pour rafraîchir l'affichage
