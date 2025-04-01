@@ -102,22 +102,28 @@ public class PossederController {
 
     // Modifier une propriété
     public void updatePropriete(int idProprietaire, int idVehicule, String newNomProprietaire, String newPrenomProprietaire, String newMatriculeVehicule, Date newDateDebut, Date newDateFin) {
-        // Requête pour mettre à jour la relation dans la table POSSEDER
-        String updatePossessionQuery = "UPDATE POSSEDER SET date_debut_propriete = ?, date_fin_propriete = ? " +
-                                       "WHERE id_proprietaire = ? AND id_vehicule = ?";
-
+        // Requête pour mettre à jour les informations du propriétaire
+        String updateProprietaireQuery = "UPDATE PROPRIETAIRE SET nom = ?, prenom = ? WHERE id_proprietaire = ?";
+    
         try (Connection conn = DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = conn.prepareStatement(updateProprietaireQuery)) {
+                ps.setString(1, newNomProprietaire);
+                ps.setString(2, newPrenomProprietaire);
+                ps.setInt(3, idProprietaire);
+                ps.executeUpdate();
+            }
+    
+            // Requête pour mettre à jour la relation dans la table POSSEDER
+            String updatePossessionQuery = "UPDATE POSSEDER SET date_debut_propriete = ?, date_fin_propriete = ?, id_vehicule = (SELECT id_vehicule FROM VEHICULE WHERE matricule = ?) " +
+                    "WHERE id_proprietaire = ? AND id_vehicule = ?";
+    
             try (PreparedStatement ps = conn.prepareStatement(updatePossessionQuery)) {
                 ps.setDate(1, newDateDebut);
                 ps.setDate(2, newDateFin); // La date de fin est optionnelle
-                ps.setInt(3, idProprietaire);
-                ps.setInt(4, idVehicule);
-                int rowsUpdated = ps.executeUpdate();
-                if (rowsUpdated > 0) {
-                    showAlert("Succès", "Relation mise à jour avec succès !");
-                } else {
-                    showAlert("Erreur", "Erreur lors de la mise à jour.");
-                }
+                ps.setString(3, newMatriculeVehicule);
+                ps.setInt(4, idProprietaire);
+                ps.setInt(5, idVehicule);
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
